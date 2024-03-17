@@ -1,0 +1,14 @@
+Website = "https://pricehistory.app/"
+Input ID = "search"
+Search Button = "search-submit"
+Details Bar = "body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div"
+1st - Highest - body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div > div.col.bg-danger.text-light > span.amount
+2nd - Average - body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div > div.col.bg-warning.text-dark > span.amount
+3rd - Lowest  - body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div > div.col.bg-info.text-light > span.amount
+4th - Lowest Offer - body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div > div.col.col-12.col-md-12.col-lg.bg-success.text-light > span.amount
+
+
+
+f'This is the track result:- \n Highest price of the product:- {result["Highest"]} \n Average: price of the product:- {result["Average:"]} \n Lowest price of the product:- {result["Lowest"]} \n Lowest Offer price of the product:- {result["Lowest Offer"]}'
+
+
