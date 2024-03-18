@@ -14,6 +14,7 @@ BOT_TOKEN = os.environ.get("track_bot_token")
 
 
 def track_item(link):
+    print("Product Tracking started")
     details = {}
     options = Options()
     options.add_argument("--headless")
@@ -43,12 +44,14 @@ def track_item(link):
                 )
             )
             if element.text == "":
+                print("Cannot fetch *track*")
                 return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
             else:
+                print("Cannot fetch *track*")
                 return "Failed to fetch! This product maybe new or try again after some time!"
         except:
+            print("Cannot fetch *track*")
             return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
-        return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
     container = driver.find_elements(
         By.CSS_SELECTOR,
         "body > div > div:nth-child(6) > div.col-12.px-0.py-2.all-time-price-overview.small > div > div",
@@ -62,6 +65,7 @@ def track_item(link):
     ).text
     details["Current Price: "] = current_price
     driver.close()
+    print("Return details :- ", details)
     return details
 
 
@@ -88,8 +92,10 @@ def formatter(dic):
         result = "Price Tracking of your item is :- \n"
         for key, value in dic.items():
             result += f"{key} {value} \n"
+        print("Return from fommatter", result)
         return result
     else:
+        print("Return from fommatter", dic)
         return dic
 
 
@@ -99,6 +105,7 @@ async def help(update, context):
 
 
 async def track(update, context):
+    print("Request came for track")
     item_link = str(update.message.text).replace("/track", "").strip()
     if item_link == "":
         await update.message.reply_text(
