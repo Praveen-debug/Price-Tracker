@@ -16,7 +16,7 @@ BOT_TOKEN = os.environ.get("track_bot_token")
 def track_item(link):
     details = {}
     options = Options()
-    options.add_argument('--headless') 
+    options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
     wait = WebDriverWait(driver, 10)
     driver.get("https://pricehistory.app/")
@@ -33,6 +33,21 @@ def track_item(link):
             )
         )
     except TimeoutException:
+        try:
+            element = wait.until(
+                EC.visibility_of_element_located(
+                    (
+                        By.CSS_SELECTOR,
+                        "#search-message > div",
+                    )
+                )
+            )
+            if element.text == "":
+                return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
+            else:
+                return "Failed to fetch! This product maybe new or try again after some time!"
+        except:
+            return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
         return "Invalid Link!!! \n \nPlease provide a link to a product from websites like Amazon, Flipkart, etc. If the problem persists, please report it to username.praveen.email@gmail.com."
     container = driver.find_elements(
         By.CSS_SELECTOR,
@@ -41,7 +56,10 @@ def track_item(link):
     for item in container:
         divs = item.find_elements(By.TAG_NAME, "span")
         details[divs[0].text] = divs[1].text
-    current_price = driver.find_element(By.CSS_SELECTOR, "body > div > div:nth-child(6) > div.col-md-12.col-lg-5.col-xl-4.ph-pricing.mt-2.mb-2.border.shadow-sm.p-2.bg-light > div.ph-pricing-pricing").text
+    current_price = driver.find_element(
+        By.CSS_SELECTOR,
+        "body > div > div:nth-child(6) > div.col-md-12.col-lg-5.col-xl-4.ph-pricing.mt-2.mb-2.border.shadow-sm.p-2.bg-light > div.ph-pricing-pricing",
+    ).text
     details["Current Price: "] = current_price
     driver.close()
     return details
@@ -64,6 +82,7 @@ def run_in_thread(function, link):
 
     return result_holder.result
 
+
 def formatter(dic):
     if isinstance(dic, dict):
         result = "Price Tracking of your item is :- \n"
@@ -82,10 +101,13 @@ async def help(update, context):
 async def track(update, context):
     item_link = str(update.message.text).replace("/track", "").strip()
     if item_link == "":
-        await update.message.reply_text(r"Please provide a link after /track. Example:- /track {link}")
+        await update.message.reply_text(
+            r"Please provide a link after /track. Example:- /track {link}"
+        )
         return
     result = run_in_thread(track_item, item_link)
     await update.message.reply_text(str(formatter(result)))
+
 
 async def error(update, context):
     print(f"Update {update} caused error:- {context.error}")
