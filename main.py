@@ -10,7 +10,7 @@ import threading
 import os
 
 
-BOT_TOKEN = os.environ.get("track_bot_token")
+BOT_TOKEN = os.environ["track_bot_token"]
 
 
 def track_item(link):
@@ -19,7 +19,7 @@ def track_item(link):
     options = Options()
     options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 20)
     driver.get("https://pricehistory.app/")
     element = wait.until(EC.visibility_of_element_located((By.ID, "search")))
     driver.find_element(By.ID, "search").send_keys(link)
